@@ -18,7 +18,7 @@ def rotate_a(matrix)
   res
 end
 
-# A: time = O(n), mem = O(1)
+# B: time = O(n), mem = O(1)
 def rotate_b(matrix)
   n = matrix.size
   half_n = n / 2
