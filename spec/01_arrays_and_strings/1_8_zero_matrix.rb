@@ -2,7 +2,6 @@
 
 # time = O(M*N), mem = O(M + N)
 def zero_matrix_a(matrix)
-  res = []
   n = matrix.size # rows
   m = matrix[0].size # cols
 
