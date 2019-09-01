@@ -1,9 +1,9 @@
-package main
+package arrays
 
 import (
-	"testing"
-	"gotest.tools/assert"
 	. "github.com/holyketzer/ctci_v6/test_helper"
+	"gotest.tools/assert"
+	"testing"
 )
 
 func TestAllUniq(t *testing.T) {
