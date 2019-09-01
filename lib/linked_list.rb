@@ -19,16 +19,20 @@ def ll(arr)
 end
 
 def ll_add_value(head, value)
+  ll_add_node(head, LLNode.new(value))
+end
+
+def ll_add_node(head, node)
   if head
     tail = head
     while tail.next_node do
       tail = tail.next_node
     end
 
-    tail.next_node = LLNode.new(value)
+    tail.next_node = node
     head
   else
-    LLNode.new(value)
+    node
   end
 end
 
