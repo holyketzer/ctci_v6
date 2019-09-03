@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestRotationA(t *testing.T) {
+func TestRotation(t *testing.T) {
 	for _, f := range []func(string, string) bool{RotationA} {
 		name := GetFunctionName(f)
 

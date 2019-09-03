@@ -32,3 +32,19 @@ func MatrixToString(matrix [][]int) string {
 
 	return res.String()
 }
+
+func SliceToString(row []int) string {
+	res := bytes.Buffer{}
+	res.WriteString("[")
+
+	for i, item := range row {
+		res.WriteString(strconv.Itoa(item))
+
+		if i < len(row)-1 {
+			res.WriteString(", ")
+		}
+	}
+
+	res.WriteString("]\n")
+	return res.String()
+}
