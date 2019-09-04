@@ -47,7 +47,7 @@ class NStacksArray
 
   def peek(stack)
     if size(stack) > 0
-      @arr[stack -1]
+      @arr[stack - 1]
     end
   end
 end

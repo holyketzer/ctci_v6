@@ -11,6 +11,10 @@ class StackWithMin
     end
   end
 
+  def initialize
+    @tail = nil
+  end
+
   def push(value)
     if @tail
       @tail = SNode.new(value, @tail.min, @tail)
