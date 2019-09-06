@@ -8,6 +8,36 @@ class LLNode
   end
 end
 
+class LinkedList
+  def initialize(arr = nil)
+    @head = ll(Array(arr))
+  end
+
+  def push(value)
+    @head = ll_add_value(@head, value)
+  end
+
+  def pop
+    if @head
+      value = @head.value
+      @head = @head.next_node
+      value
+    end
+  end
+
+  def to_array
+    ll_to_array(@head)
+  end
+
+  def empty?
+    @head == nil
+  end
+
+  def head_value
+    @head.value
+  end
+end
+
 def ll(arr)
   head = nil
 

@@ -10,8 +10,12 @@ class Stack
 
   attr_reader :tail
 
-  def initialize
+  def initialize(arr = nil)
     @tail = nil
+
+    Array(arr).reverse.each do |value|
+      push(value)
+    end
   end
 
   def push(value)
@@ -20,6 +24,8 @@ class Stack
     else
       @tail = SNode.new(value)
     end
+
+    self
   end
 
   def pop
@@ -28,6 +34,26 @@ class Stack
       @tail = @tail.prev
       value
     end
+  end
+
+  def empty?
+    @tail == nil
+  end
+
+  def peek
+    @tail&.value
+  end
+
+  def to_a
+    res = []
+    curr = @tail
+
+    while curr do
+      res << curr.value
+      curr = curr.prev
+    end
+
+    res.reverse
   end
 
   def to_s
