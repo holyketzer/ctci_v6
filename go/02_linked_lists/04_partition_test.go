@@ -1,7 +1,7 @@
 package linked_lists
 
 import (
-	"fmt"
+	// "fmt"
 	. "github.com/holyketzer/ctci_v6/test_helper"
 	"gotest.tools/assert"
 	"sort"
@@ -55,9 +55,9 @@ func expectOrderedPartition(t *testing.T, f func(*llnode, int) *llnode, list *ll
 	actualEqualAndGreater := actual[len(lower) : len(lower)+len(equalAndGreater)]
 	sort.Ints(actualEqualAndGreater)
 
-	fmt.Println(expected, " ~ ", actual)
-	fmt.Println(actualLower, " = ", lower)
-	fmt.Println(actualEqualAndGreater, " = ", equalAndGreater)
+	// fmt.Println(expected, " ~ ", actual)
+	// fmt.Println(actualLower, " = ", lower)
+	// fmt.Println(actualEqualAndGreater, " = ", equalAndGreater)
 
 	assert.Equal(t, SliceToString(actualLower), SliceToString(lower), name)
 	assert.Equal(t, SliceToString(actualEqualAndGreater), SliceToString(equalAndGreater), name)

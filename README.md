@@ -16,3 +16,6 @@ rspec
 cd go
 go test ./...
 ```
+## TODO:
+
+* Find more clean approach for 3.3

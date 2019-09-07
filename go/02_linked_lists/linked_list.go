@@ -1,5 +1,10 @@
 package linked_lists
 
+import (
+	"bytes"
+	"strconv"
+)
+
 // Linked List
 type llnode struct {
 	value int
@@ -57,4 +62,24 @@ func (head *llnode) LLSize() int {
 	}
 
 	return n
+}
+
+func SliceToString(row []int) string {
+	res := bytes.Buffer{}
+	res.WriteString("[")
+
+	for i, item := range row {
+		res.WriteString(strconv.Itoa(item))
+
+		if i < len(row)-1 {
+			res.WriteString(", ")
+		}
+	}
+
+	res.WriteString("]\n")
+	return res.String()
+}
+
+func (head *llnode) ToString() string {
+	return SliceToString(head.LLToArray())
 }
