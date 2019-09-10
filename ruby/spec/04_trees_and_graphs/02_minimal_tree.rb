@@ -4,9 +4,9 @@ def array_to_bst_a(arr)
   BinaryTree.new(create_bst(arr, 0, arr.size - 1))
 end
 
-def create_bst(arr, l, r)
+def create_bst(arr, l, r, parent: nil)
   if l == r
-    BinaryTree::Node.new(arr[l])
+    BinaryTree::Node.new(arr[l], parent: parent)
   else
     m = (l + r) / 2
 
@@ -14,13 +14,13 @@ def create_bst(arr, l, r)
       m += 1
     end
 
-    BinaryTree::Node.new(arr[m]).tap do |node|
+    BinaryTree::Node.new(arr[m], parent: parent).tap do |node|
       if l != m
-        node.left = create_bst(arr, l, m - 1)
+        node.left = create_bst(arr, l, m - 1, parent: node)
       end
 
       if r != m
-        node.right = create_bst(arr, m + 1, r)
+        node.right = create_bst(arr, m + 1, r, parent: node)
       end
     end
   end
