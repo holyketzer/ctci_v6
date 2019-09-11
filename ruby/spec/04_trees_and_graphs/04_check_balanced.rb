@@ -8,17 +8,17 @@ end
 
 def balanced_from_node?(node)
   if node
-    balanced = (depth(node.left) - depth(node.right)).abs <= 1
+    balanced = (depth_to_bottom(node.left) - depth_to_bottom(node.right)).abs <= 1
     balanced && balanced_from_node?(node.left) && balanced_from_node?(node.right)
   else
     true
   end
 end
 
-def depth(node)
+def depth_to_bottom(node)
   if node
-    ld = depth(node.left)
-    rd = depth(node.right)
+    ld = depth_to_bottom(node.left)
+    rd = depth_to_bottom(node.right)
 
     if ld > rd
       ld + 1
