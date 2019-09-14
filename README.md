@@ -18,4 +18,6 @@ go test ./...
 ```
 ## TODO:
 
-* Find more clean approach for 3.3
+* 3.3 find more clean approach
+* 4.1 check diamond relation
+* 4.7 review cycle detection
