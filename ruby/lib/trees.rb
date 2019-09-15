@@ -28,6 +28,14 @@ class BinaryTree
 
       res
     end
+
+    def append_left(value)
+      self.left = Node.new(value, parent: self)
+    end
+
+    def append_right(value)
+      self.right = Node.new(value, parent: self)
+    end
   end
 
   attr_accessor :root
