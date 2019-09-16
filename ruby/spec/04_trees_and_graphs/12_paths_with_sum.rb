@@ -1,5 +1,5 @@
 # n - count of nodes, k - depth of tree
-# Time=O(n*2^k) Mem=O(k)
+# Time=O(n^2) Mem=O(k)
 def paths_with_sum_a(tree, sum)
   count_of_paths_bfs(tree.root, sum)
 end

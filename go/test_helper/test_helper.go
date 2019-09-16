@@ -36,7 +36,7 @@ func MatrixToString(matrix [][]int) string {
 func StringToIntSlice(str string) []int {
 	res := []int{}
 
-	for _, r := range ([]rune(str)) {
+	for _, r := range []rune(str) {
 		res = append(res, int(r))
 	}
 

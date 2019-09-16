@@ -1,24 +1,24 @@
 package linked_lists
 
 import (
-  . "github.com/holyketzer/ctci_v6/test_helper"
-  "gotest.tools/assert"
-  "testing"
+	. "github.com/holyketzer/ctci_v6/test_helper"
+	"gotest.tools/assert"
+	"testing"
 )
 
 func TestIntersection(t *testing.T) {
-  for _, f := range []func(*llnode, *llnode) bool{IntersectionA} {
-    name := GetFunctionName(f)
+	for _, f := range []func(*llnode, *llnode) bool{IntersectionA} {
+		name := GetFunctionName(f)
 
-    // no intersection
-    a := LL([]int{1, 2, 3, 4, 5})
-    b := LL([]int{1, 2, 3, 4, 5})
-    assert.Equal(t, f(a, b), false, name)
+		// no intersection
+		a := LL([]int{1, 2, 3, 4, 5})
+		b := LL([]int{1, 2, 3, 4, 5})
+		assert.Equal(t, f(a, b), false, name)
 
-    // with intersection
-    a = LL([]int{1, 2, 3, 4, 5})
-    bHead := LL([]int{7, 8, 9})
-    b = bHead.LLAddNode(a.next.next.next)
-    assert.Equal(t, f(a, b), true, name)
-  }
+		// with intersection
+		a = LL([]int{1, 2, 3, 4, 5})
+		bHead := LL([]int{7, 8, 9})
+		b = bHead.LLAddNode(a.next.next.next)
+		assert.Equal(t, f(a, b), true, name)
+	}
 }
