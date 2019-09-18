@@ -1,3 +1,4 @@
+# b - count of bits
 # Time = O(1), Mem = O(1)
 def bit_insert(n, m, i, j)
   clear_mask = (~0) << (j + 1)

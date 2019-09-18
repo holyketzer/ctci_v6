@@ -1,4 +1,5 @@
-# Time = O(1), Mem = O(1)
+# b - count of bits
+# Time = O(b), Mem = O(1)
 def binary_to_string(d)
   res = []
   v = d
