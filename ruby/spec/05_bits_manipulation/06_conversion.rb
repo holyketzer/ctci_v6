@@ -28,7 +28,7 @@ def has_bit?(n, bit)
   n & mask > 0
 end
 
-RSpec.describe 'same bits functions' do
+RSpec.describe 'conversion' do
   %i(a b).each do |implementation|
     describe "#{implementation} case" do
       describe 'count_of_diff_bits' do
