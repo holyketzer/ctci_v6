@@ -1,16 +1,20 @@
 package linked_lists
 
+import (
+	. "github.com/holyketzer/ctci_v6/lib"
+)
+
 // time = O(n), mem = O(1)
-func IntersectionA(a *llnode, b *llnode) bool {
+func IntersectionA(a *LLNode, b *LLNode) bool {
 	aTail := a
 	bTail := b
 
-	for aTail.next != nil {
-		aTail = aTail.next
+	for aTail.Next != nil {
+		aTail = aTail.Next
 	}
 
-	for bTail.next != nil {
-		bTail = bTail.next
+	for bTail.Next != nil {
+		bTail = bTail.Next
 	}
 
 	return aTail == bTail

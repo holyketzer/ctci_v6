@@ -1,29 +1,33 @@
 package linked_lists
 
-// time = O(n), mem = O(1)
-func PartitionB(head *llnode, x int) *llnode {
-	l := head
-	r := head.next
+import (
+	. "github.com/holyketzer/ctci_v6/lib"
+)
 
-	for l.value >= x {
+// time = O(n), mem = O(1)
+func PartitionB(head *LLNode, x int) *LLNode {
+	l := head
+	r := head.Next
+
+	for l.Value >= x {
 		SwapValues(l, r)
-		r = r.next
+		r = r.Next
 	}
 
 	for r != nil {
-		if r.value < x {
-			l = l.next
+		if r.Value < x {
+			l = l.Next
 			SwapValues(l, r)
 		}
 
-		r = r.next
+		r = r.Next
 	}
 
 	return head
 }
 
-func SwapValues(a *llnode, b *llnode) {
-	tmp := a.value
-	a.value = b.value
-	b.value = tmp
+func SwapValues(a *LLNode, b *LLNode) {
+	tmp := a.Value
+	a.Value = b.Value
+	b.Value = tmp
 }

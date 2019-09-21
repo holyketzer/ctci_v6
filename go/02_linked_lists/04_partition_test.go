@@ -2,6 +2,7 @@ package linked_lists
 
 import (
 	// "fmt"
+	. "github.com/holyketzer/ctci_v6/lib"
 	. "github.com/holyketzer/ctci_v6/test_helper"
 	"gotest.tools/assert"
 	"sort"
@@ -9,7 +10,7 @@ import (
 )
 
 func TestPartition(t *testing.T) {
-	for _, f := range []func(*llnode, int) *llnode{PartitionB} {
+	for _, f := range []func(*LLNode, int) *LLNode{PartitionB} {
 		x := 5
 		expected := []int{1, 2, 3, 5, 5, 8, 10}
 
@@ -39,7 +40,7 @@ func filter(coll []int, pred func(int) bool) []int {
 	return res
 }
 
-func expectOrderedPartition(t *testing.T, f func(*llnode, int) *llnode, list *llnode, expected []int, x int) {
+func expectOrderedPartition(t *testing.T, f func(*LLNode, int) *LLNode, list *LLNode, expected []int, x int) {
 	name := GetFunctionName(f)
 	actual := f(list, x).LLToArray()
 

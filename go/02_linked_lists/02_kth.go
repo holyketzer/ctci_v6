@@ -2,11 +2,12 @@ package linked_lists
 
 import (
 	"errors"
+	. "github.com/holyketzer/ctci_v6/lib"
 )
 
 // n - list size
 // time = O(n), mem = O(1)
-func KthA(head *llnode, k int) (int, error) {
+func KthA(head *LLNode, k int) (int, error) {
 	n := head.LLSize()
 
 	var res *int
@@ -14,8 +15,8 @@ func KthA(head *llnode, k int) (int, error) {
 	i := 0
 
 	for n-i >= k {
-		res = &curr.value
-		curr = curr.next
+		res = &curr.Value
+		curr = curr.Next
 		i += 1
 	}
 
@@ -27,7 +28,7 @@ func KthA(head *llnode, k int) (int, error) {
 }
 
 // time = O(n), mem = O(n), recursive
-func KthB(head *llnode, k int) (int, error) {
+func KthB(head *LLNode, k int) (int, error) {
 	n := head.LLSize()
 	res := NthRecursuve(head, n-k)
 
@@ -38,32 +39,32 @@ func KthB(head *llnode, k int) (int, error) {
 	}
 }
 
-func NthRecursuve(head *llnode, i int) *int {
+func NthRecursuve(head *LLNode, i int) *int {
 	if i == 0 || head == nil {
 		if head == nil {
 			return nil
 		} else {
-			return &head.value
+			return &head.Value
 		}
 	} else {
-		return NthRecursuve(head.next, i-1)
+		return NthRecursuve(head.Next, i-1)
 	}
 }
 
 // time = O(n), mem = O(1), fast and slow iterators
-func KthC(head *llnode, k int) (int, error) {
+func KthC(head *LLNode, k int) (int, error) {
 	slow := head
 	fast := head
 	slowCounter := 0
 	size := 0
 
 	for fast != nil {
-		fast = fast.next
+		fast = fast.Next
 		size += 1
 
 		if fast != nil {
-			slow = slow.next
-			fast = fast.next
+			slow = slow.Next
+			fast = fast.Next
 			slowCounter += 1
 			size += 1
 		}
@@ -75,15 +76,15 @@ func KthC(head *llnode, k int) (int, error) {
 		return -1, errors.New("list is blank")
 	} else if index > slowCounter {
 		for index != slowCounter {
-			slow = slow.next
+			slow = slow.Next
 			slowCounter += 1
 		}
-		return slow.value, nil
+		return slow.Value, nil
 	} else {
 		curr := head
 		for i := 0; index != i; i++ {
-			curr = curr.next
+			curr = curr.Next
 		}
-		return curr.value, nil
+		return curr.Value, nil
 	}
 }

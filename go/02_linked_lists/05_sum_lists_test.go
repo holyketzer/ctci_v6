@@ -1,6 +1,7 @@
 package linked_lists
 
 import (
+	. "github.com/holyketzer/ctci_v6/lib"
 	"gotest.tools/assert"
 	"testing"
 )

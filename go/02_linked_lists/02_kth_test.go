@@ -1,13 +1,14 @@
 package linked_lists
 
 import (
+	. "github.com/holyketzer/ctci_v6/lib"
 	. "github.com/holyketzer/ctci_v6/test_helper"
 	"gotest.tools/assert"
 	"testing"
 )
 
 func TestKth(t *testing.T) {
-	for _, f := range []func(*llnode, int) (int, error){KthA, KthB, KthC} {
+	for _, f := range []func(*LLNode, int) (int, error){KthA, KthB, KthC} {
 		list := LL([]int{1, 2, 3, 4, 5, 6, 7})
 
 		AssertKth(t, f, list, 1, 7, nil)
@@ -19,7 +20,7 @@ func TestKth(t *testing.T) {
 	}
 }
 
-func AssertKth(t *testing.T, f func(*llnode, int) (int, error), list *llnode, k int, expectedRes int, expectedErr *string) {
+func AssertKth(t *testing.T, f func(*LLNode, int) (int, error), list *LLNode, k int, expectedRes int, expectedErr *string) {
 	name := GetFunctionName(f)
 	res, err := f(list, k)
 

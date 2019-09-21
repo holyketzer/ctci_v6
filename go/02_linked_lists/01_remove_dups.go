@@ -2,53 +2,54 @@ package linked_lists
 
 import (
 	"github.com/golang-collections/collections/set"
+	. "github.com/holyketzer/ctci_v6/lib"
 )
 
 // n - list size
 // time = O(n), mem = O(n)
-func RemoveDupsB(head *llnode) *llnode {
+func RemoveDupsB(head *LLNode) *LLNode {
 	s := set.New()
 	curr := head
 
 	for curr != nil {
-		s.Insert(curr.value)
-		curr = curr.next
+		s.Insert(curr.Value)
+		curr = curr.Next
 	}
 
 	curr = head
-	var prev *llnode
+	var prev *LLNode
 
 	for curr != nil {
-		if s.Has(curr.value) {
-			s.Remove(curr.value)
+		if s.Has(curr.Value) {
+			s.Remove(curr.Value)
 			prev = curr
 		} else {
-			prev.next = curr.next
+			prev.Next = curr.Next
 		}
 
-		curr = curr.next
+		curr = curr.Next
 	}
 
 	return head
 }
 
 // time = O(n*log(n)), mem = O(n)
-func RemoveDupsC(head *llnode) *llnode {
+func RemoveDupsC(head *LLNode) *LLNode {
 	head = SortLL(head)
 	curr := head
 
-	for curr.next != nil {
-		if curr.value == curr.next.value {
-			curr.next = curr.next.next
+	for curr.Next != nil {
+		if curr.Value == curr.Next.Value {
+			curr.Next = curr.Next.Next
 		} else {
-			curr = curr.next
+			curr = curr.Next
 		}
 	}
 
 	return head
 }
 
-func SortLL(head *llnode) *llnode {
+func SortLL(head *LLNode) *LLNode {
 	if head.LLSize() < 2 {
 		return head
 	} else {
@@ -57,53 +58,53 @@ func SortLL(head *llnode) *llnode {
 	}
 }
 
-func HalveList(head *llnode) (*llnode, *llnode) {
+func HalveList(head *LLNode) (*LLNode, *LLNode) {
 	half := head.LLSize() / 2
 	a := head
 	curr := a
 	aSize := 1
 
 	for aSize < half {
-		curr = curr.next
+		curr = curr.Next
 		aSize += 1
 	}
 
-	b := curr.next
-	curr.next = nil
+	b := curr.Next
+	curr.Next = nil
 	return a, b
 }
 
-func MergeSortedLL(a *llnode, b *llnode) *llnode {
-	var head *llnode
+func MergeSortedLL(a *LLNode, b *LLNode) *LLNode {
+	var head *LLNode
 
-	if a.value < b.value {
+	if a.Value < b.Value {
 		head = a
-		a = a.next
+		a = a.Next
 	} else {
 		head = b
-		b = b.next
+		b = b.Next
 	}
 
 	curr := head
 
 	for a != nil || b != nil {
 		if a != nil && b != nil {
-			if a.value < b.value {
-				curr.next = a
-				a = a.next
+			if a.Value < b.Value {
+				curr.Next = a
+				a = a.Next
 			} else {
-				curr.next = b
-				b = b.next
+				curr.Next = b
+				b = b.Next
 			}
 		} else if a != nil {
-			curr.next = a
-			a = a.next
+			curr.Next = a
+			a = a.Next
 		} else {
-			curr.next = b
-			b = b.next
+			curr.Next = b
+			b = b.Next
 		}
 
-		curr = curr.next
+		curr = curr.Next
 	}
 
 	return head

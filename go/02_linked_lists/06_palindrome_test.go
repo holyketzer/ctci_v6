@@ -1,13 +1,14 @@
 package linked_lists
 
 import (
+	. "github.com/holyketzer/ctci_v6/lib"
 	. "github.com/holyketzer/ctci_v6/test_helper"
 	"gotest.tools/assert"
 	"testing"
 )
 
 func TestPalindrome(t *testing.T) {
-	for _, f := range []func(*llnode) bool{PalindromeA} {
+	for _, f := range []func(*LLNode) bool{PalindromeA} {
 		name := GetFunctionName(f)
 
 		// palindrome even

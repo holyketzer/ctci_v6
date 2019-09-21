@@ -1,38 +1,42 @@
 package linked_lists
 
+import (
+	. "github.com/holyketzer/ctci_v6/lib"
+)
+
 // time = O(n), mem = O(n)
-func PalindromeA(head *llnode) bool {
+func PalindromeA(head *LLNode) bool {
 	half := head
 	fast := head
 	slow := head
 	count := 1
 
-	for fast.next != nil {
-		fast = fast.next
+	for fast.Next != nil {
+		fast = fast.Next
 		count += 1
 
-		if fast.next != nil {
-			fast = fast.next
+		if fast.Next != nil {
+			fast = fast.Next
 			count += 1
 
-			slow = slow.next
-			half = &llnode{value: slow.value, next: half}
+			slow = slow.Next
+			half = &LLNode{Value: slow.Value, Next: half}
 		}
 	}
 
 	rest := slow
 
 	if count%2 == 0 {
-		rest = slow.next
+		rest = slow.Next
 	}
 
 	for rest != nil {
-		if rest.value != half.value {
+		if rest.Value != half.Value {
 			return false
 		}
 
-		rest = rest.next
-		half = half.next
+		rest = rest.Next
+		half = half.Next
 	}
 
 	return true
