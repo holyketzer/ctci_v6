@@ -63,6 +63,14 @@ func (head *LLNode) LLSize() int {
 	return n
 }
 
+func (head *LLNode) Any() bool {
+	return head != nil
+}
+
+func (head *LLNode) Empty() bool {
+	return head == nil
+}
+
 func (head *LLNode) ToString() string {
 	return SliceToString(head.LLToArray())
 }
