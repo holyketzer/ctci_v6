@@ -1,6 +1,6 @@
 # Check that number has only one leading non zero bit
 def power_of_two?(n)
-  (n & (n -1)) == 0
+  (n & (n - 1)) == 0
 end
 
 RSpec.describe 'power_of_two?' do

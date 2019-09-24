@@ -44,7 +44,6 @@ RSpec.describe 'draw_line' do
         let(:x2) { 30 }
 
         it do
-          p subject
           # Line 1
           expect(subject[0]).to eq 0
           expect(subject[1]).to eq 0
