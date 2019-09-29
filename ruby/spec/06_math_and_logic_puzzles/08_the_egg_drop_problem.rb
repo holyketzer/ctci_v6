@@ -6,7 +6,6 @@ RSpec.describe 'smallest count of drops' do
     while i < 100 do
       n += 1
       i += n
-      p i
     end
 
     expect(n).to eq 14

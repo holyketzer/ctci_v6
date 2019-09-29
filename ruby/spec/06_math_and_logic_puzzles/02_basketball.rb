@@ -47,7 +47,7 @@ RSpec.describe 'find_heaviest_jar' do
 
       prefer = g1 > g2 ? 'prefer game 1' : (g2 > g1 ? 'prefer game 2' : 'both games ok')
 
-      if ARGV[0] && __FILE__.include?(ARGV[0])
+      if only_this_file_run?(__FILE__)
         puts "  p = #{'%.2f' % p} Game1 = #{'%.2f' % g1} Game2 = #{'%.2f' % g2}  #{prefer}"
       end
     end

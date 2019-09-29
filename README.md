@@ -21,3 +21,4 @@ go test ./...
 * 3.3 find more clean approach
 * 4.1 check diamond relation
 * 4.7 review cycle detection
+* 7.2 refactor with features

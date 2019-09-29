@@ -55,3 +55,8 @@ def my_permute(arr)
     res
   end
 end
+
+
+def only_this_file_run?(file)
+  ARGV[0] && file.include?(ARGV[0])
+end
