@@ -22,7 +22,6 @@ def hundreed_lockers_b(lockers_open)
 end
 
 def to_prime_numbers(n)
-  n
   res = []
   i = 2
 
