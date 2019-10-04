@@ -9,6 +9,8 @@ class LLNode
 end
 
 class LinkedList
+  attr_reader :head
+
   def initialize(arr = nil)
     @head = ll(Array(arr))
   end
@@ -35,6 +37,18 @@ class LinkedList
 
   def head_value
     @head.value
+  end
+
+  def each(&block)
+    curr = head
+    while curr do
+      block.call(curr)
+      curr = curr.next_node
+    end
+  end
+
+  def remove_first
+    @head = @head&.next_node
   end
 end
 

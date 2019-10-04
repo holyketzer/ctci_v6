@@ -182,5 +182,7 @@ class MineField
   end
 end
 
-MineField.new(10, 3).start_game!
+if only_this_file_run?(__FILE__)
+  MineField.new(10, 3).start_game!
+end
 

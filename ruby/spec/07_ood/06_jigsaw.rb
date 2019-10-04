@@ -207,7 +207,11 @@ RSpec.describe 'JigsawPuzzle' do
 
   it do
     puzzle.solve
-    puts puzzle.to_s
+
+    if only_this_file_run?(__FILE__)
+      puts puzzle.to_s
+    end
+
     expect(puzzle.solved?).to eq true
   end
 end
