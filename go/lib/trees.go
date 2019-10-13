@@ -48,12 +48,14 @@ func (n *BTNode) ToString() string {
 	return res.String()
 }
 
-func (n *BTNode) AppendLeft(value int) {
+func (n *BTNode) AppendLeft(value int) *BTNode {
 	n.Left = &BTNode{Value: value, Parent: n}
+	return n.Left
 }
 
-func (n *BTNode) AppendRight(value int) {
+func (n *BTNode) AppendRight(value int) *BTNode {
 	n.Right = &BTNode{Value: value, Parent: n}
+	return n.Right
 }
 
 type BinaryTree struct {
