@@ -130,7 +130,7 @@ class RandomTree
       node.count += 1
       delete(lr)
     elsif (r = node.right)
-      rl = right.left
+      rl = r.left
       node.value = rl.value
       node.count += 1
       delete(rl)
