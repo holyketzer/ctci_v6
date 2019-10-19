@@ -1,0 +1,59 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        it { is_expected.to eq 1 }
+        it { is_expected.to eq 11 }
+        it { is_expected.to eq nil }
+        let(:v) { 'at' }
+        let(:v) { 'dad' }
+        let(:v) { 'her' }
+      context 'existing value "at"' do
+      context 'existing value "dad"' do
+      context 'not existing value "her"' do
+      end
+      end
+      end
+      let(:arr) { ['', 'at', '', '', '', 'ball', '', '', 'car', '', '', 'dad', '', ''] }
+      m -= 1
+      return nil
+      subject { send("sparse_search_#{implementation}", arr, v) }
+    describe "#{implementation} case" do
+    end
+    end
+    end
+    if m == l
+    l = m + 1
+    m += 1
+    m = (l + r) / 2
+    r = m - 1
+    return m
+    while arr[m] == '' && m > l do
+  %i(a).each do |implementation|
+  else
+  elsif arr[m] > v
+  end
+  end
+  end
+  end
+  if arr[m] == v
+  if m == r
+  m = (l + r) / 2
+  sparse_search_a(arr, v, l, r)
+  while arr[m] == '' && m < r do
+# Time = O(log n), worth case O(n), Mem = O(log n)
+# n - size of arr
+RSpec.describe 'sparse_search' do
+def sparse_search_a(arr, v, l = 0, r = arr.size - 1)
+end
+end
