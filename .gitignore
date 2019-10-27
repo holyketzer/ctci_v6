@@ -1,6 +1,7 @@
 go/ctci_v6
 
 *.gem
+*.out
 *.rbc
 /ruby/.config
 /ruby/coverage/
