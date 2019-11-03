@@ -1,3 +1,4 @@
+// TODO: actually it's stupid pointer
 #include <iostream>
 
 class Node {

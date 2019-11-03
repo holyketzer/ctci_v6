@@ -23,3 +23,4 @@ go test ./...
 * 4.7 review cycle detection
 * 7.2 refactor with features
 * 10.9 implement binary search in matrix
+* 12.9 fix smart pointer
