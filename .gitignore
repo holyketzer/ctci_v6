@@ -4,6 +4,7 @@ go/ctci_v6
 *.out
 *.rbc
 *.class
+.venv2
 /ruby/.config
 /ruby/coverage/
 /ruby/InstalledFiles
