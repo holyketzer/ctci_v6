@@ -1,0 +1,85 @@
+-- # 100k points:
+
+SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_relation_size(C.oid)) AS "size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+  ORDER BY pg_relation_size(C.oid) DESC
+  LIMIT 20;
+
+public.points_p_idx           | 7240 kB
+public.points                 | 5096 kB
+public.spatial_ref_sys        | 4584 kB
+public.points_pkey            | 2208 kB
+
+-- >>> Without index:
+test=# EXPLAIN ANALYZE SELECT * FROM points order by p <-> point '(37.617635,55.755814)' limit 10;
+                                                         QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=4048.03..4048.06 rows=10 width=28) (actual time=1479.156..1479.378 rows=10 loops=1)
+   ->  Sort  (cost=4048.03..4298.04 rows=100002 width=28) (actual time=1479.137..1479.211 rows=10 loops=1)
+         Sort Key: ((p <-> '(37.617635,55.755814)'::point))
+         Sort Method: top-N heapsort  Memory: 26kB
+         ->  Seq Scan on points  (cost=0.00..1887.03 rows=100002 width=28) (actual time=0.027..736.508 rows=100002 loops=1)
+ Planning Time: 0.173 ms
+ Execution Time: 1479.528 ms
+
+-- >>> With index:
+test=# EXPLAIN ANALYZE SELECT * FROM points order by p <-> point '(37.617635,55.755814)' limit 10;
+                                                             QUERY PLAN
+-------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.28..1.10 rows=10 width=28) (actual time=0.063..0.315 rows=10 loops=1)
+   ->  Index Scan using points_p_idx on points  (cost=0.28..8168.32 rows=100002 width=28) (actual time=0.048..0.158 rows=10 loops=1)
+         Order By: (p <-> '(37.617635,55.755814)'::point)
+ Planning Time: 0.067 ms
+ Execution Time: 0.448 ms
+
+
+-- # 1.1M points:
+
+          relation            |    size
+------------------------------+------------
+public.points_p_idx           | 78 MB
+public.points                 | 55 MB
+public.points_pkey            | 24 MB
+public.spatial_ref_sys        | 4584 kB
+
+>>> Without Index:
+test=# EXPLAIN ANALYZE SELECT * FROM points order by p <-> point '(37.617635,55.755814)' limit 10;
+                                                                 QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=23640.63..23641.80 rows=10 width=28) (actual time=6744.784..6759.487 rows=10 loops=1)
+   ->  Gather Merge  (cost=23640.63..130592.70 rows=916668 width=28) (actual time=6744.767..6759.253 rows=10 loops=1)
+         Workers Planned: 2
+         Workers Launched: 2
+         ->  Sort  (cost=22640.61..23786.44 rows=458334 width=28) (actual time=6741.451..6741.524 rows=8 loops=3)
+               Sort Key: ((p <-> '(37.617635,55.755814)'::point))
+               Sort Method: top-N heapsort  Memory: 26kB
+               Worker 0:  Sort Method: top-N heapsort  Memory: 26kB
+               Worker 1:  Sort Method: top-N heapsort  Memory: 26kB
+               ->  Parallel Seq Scan on points  (cost=0.00..12736.18 rows=458334 width=28) (actual time=0.018..3387.202 rows=366667 loops=3)
+ Planning Time: 0.069 ms
+ Execution Time: 6759.712 ms
+
+
+>>> With index:
+test=# EXPLAIN ANALYZE SELECT * FROM points order by p <-> point '(37.617635,55.755814)' limit 10;
+                                                              QUERY PLAN
+---------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.29..1.10 rows=10 width=28) (actual time=0.124..0.515 rows=10 loops=1)
+   ->  Index Scan using points_p_idx on points  (cost=0.29..89972.33 rows=1100002 width=28) (actual time=0.092..0.293 rows=10 loops=1)
+         Order By: (p <-> '(37.617635,55.755814)'::point)
+ Planning Time: 0.134 ms
+ Execution Time: 0.692 ms
+
+
+>>> With index top 100:
+test=# EXPLAIN ANALYZE SELECT * FROM points order by p <-> point '(37.617635,55.755814)' limit 100;
+                                                               QUERY PLAN
+----------------------------------------------------------------------------------------------------------------------------------------
+ Limit  (cost=0.29..8.46 rows=100 width=28) (actual time=0.135..3.444 rows=100 loops=1)
+   ->  Index Scan using points_p_idx on points  (cost=0.29..89972.33 rows=1100002 width=28) (actual time=0.116..1.598 rows=100 loops=1)
+         Order By: (p <-> '(37.617635,55.755814)'::point)
+ Planning Time: 0.095 ms
+ Execution Time: 4.509 ms
