@@ -1,0 +1,47 @@
+>>> 1M
+test=# select count(*) from items;
+  count
+---------
+ 1010001
+(1 row)
+
+test=# SELECT nspname || '.' || relname AS "relation",
+    pg_size_pretty(pg_relation_size(C.oid)) AS "size"
+  FROM pg_class C
+  LEFT JOIN pg_namespace N ON (N.oid = C.relnamespace)
+  WHERE nspname NOT IN ('pg_catalog', 'information_schema')
+  ORDER BY pg_relation_size(C.oid) DESC
+  LIMIT 20;
+
+
+           relation           |    size
+------------------------------+------------
+ public.items                 | 50 MB
+ public.items_pkey            | 38 MB
+ pg_toast.pg_toast_2618       | 456 kB
+ pg_toast.pg_toast_2619       | 24 kB
+ pg_toast.pg_toast_2618_index | 16 kB
+ pg_toast.pg_toast_2619_index | 16 kB
+
+>>> 10M
+test=# select count(*) from items;
+  count
+----------
+ 10010004
+
+           relation           |    size
+------------------------------+------------
+ public.items                 | 498 MB
+ public.items_pkey            | 388 MB
+ pg_toast.pg_toast_2618       | 456 kB
+ pg_toast.pg_toast_2619       | 24 kB
+ pg_toast.pg_toast_2618_index | 16 kB
+ pg_toast.pg_toast_2619_index | 16 kB
+
+ test=# explain analyze INSERT INTO items (value) VALUES (0);
+                                          QUERY PLAN
+----------------------------------------------------------------------------------------------
+ Insert on items  (cost=0.00..0.01 rows=1 width=20) (actual time=0.800..0.838 rows=0 loops=1)
+   ->  Result  (cost=0.00..0.01 rows=1 width=20) (actual time=0.056..0.415 rows=1 loops=1)
+ Planning Time: 0.067 ms
+ Execution Time: 0.937 ms
