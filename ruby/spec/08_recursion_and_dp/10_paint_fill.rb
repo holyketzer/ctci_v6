@@ -1,4 +1,4 @@
-class Point
+class ColoredPoint
   attr_reader :x, :y
   attr_accessor :color
 
@@ -78,7 +78,7 @@ end
 def parse_canvas(arr)
   arr.each_with_index.map do |line, y|
     line.each_char.each_with_index.map do |c, x|
-      Point.new(x: x, y: y, color: c.to_i)
+      ColoredPoint.new(x: x, y: y, color: c.to_i)
     end
   end
 end
