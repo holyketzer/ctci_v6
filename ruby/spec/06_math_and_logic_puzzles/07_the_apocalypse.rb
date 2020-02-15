@@ -26,6 +26,6 @@ RSpec.describe 'queens policy' do
 
     gender_ratio = res[:boy] / res[:girl].to_f
 
-    expect(gender_ratio).to be_within(0.01).of(1)
+    expect(gender_ratio).to be_within(0.015).of(1)
   end
 end
