@@ -1,4 +1,4 @@
-require_relative './02_minimal_tree'
+require_relative '02_minimal_tree'
 
 # n - size of array, k - depth
 # Time = O(k*2^k) Mem = O(k)
@@ -49,6 +49,8 @@ def balanced_left_and_right?(l, r)
 end
 
 RSpec.describe 'balanced_bt' do
+  include MinimalTree
+
   %i(b a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("balanced_bt_#{implementation}?", tree) }

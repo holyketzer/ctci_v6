@@ -23,7 +23,7 @@ module Rand7FromRand5
 
       res.keys.each do |key|
         res[key] /= total.to_f
-        expect(res[key]).to be_within(0.01).of(1.0 / 7.0)
+        expect(res[key]).to be_within(0.015).of(1.0 / 7.0)
       end
     end
   end

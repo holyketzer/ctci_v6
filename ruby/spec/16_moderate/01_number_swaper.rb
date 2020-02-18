@@ -7,7 +7,7 @@ RSpec.describe 'number swapper' do
     b = a + b
     a = b - a
 
-    expect(a).to eq -55
+    expect(a).to eq(-55)
     expect(b).to eq 10
   end
 end

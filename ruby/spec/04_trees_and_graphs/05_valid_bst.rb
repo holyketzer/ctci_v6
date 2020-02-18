@@ -1,4 +1,4 @@
-require_relative './02_minimal_tree'
+require_relative '02_minimal_tree'
 
 # n - count of nodes
 # Time - O(n), Mem = O(1)
@@ -23,6 +23,8 @@ def valid_bst_node?(node)
 end
 
 RSpec.describe 'valid_bst' do
+  include MinimalTree
+
   %i(a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("valid_bst_#{implementation}?", tree) }

@@ -1,4 +1,4 @@
-require_relative './02_minimal_tree'
+require_relative '02_minimal_tree'
 
 # n - count of nodes, k - depth
 # Time = O(k) Mem = O(1)
@@ -40,6 +40,8 @@ def depth_to_up(node)
 end
 
 RSpec.describe 'find_common_ancestor' do
+  include MinimalTree
+
   %i(b).each do |implementation|
     describe "#{implementation} case" do
       subject { send("find_common_ancestor_#{implementation}", a, b) }

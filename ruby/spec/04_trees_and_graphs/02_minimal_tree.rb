@@ -1,32 +1,36 @@
-# n - size of array
-# Time = O(n) Mem = O(n)
-def array_to_bst_a(arr)
-  BinaryTree.new(create_bst(arr, 0, arr.size - 1))
-end
+module MinimalTree
+  # n - size of array
+  # Time = O(n) Mem = O(n)
+  def array_to_bst_a(arr)
+    BinaryTree.new(create_bst(arr, 0, arr.size - 1))
+  end
 
-def create_bst(arr, l, r, parent: nil)
-  if l == r
-    BinaryTree::Node.new(arr[l], parent: parent)
-  else
-    m = (l + r) / 2
+  def create_bst(arr, l, r, parent: nil)
+    if l == r
+      BinaryTree::Node.new(arr[l], parent: parent)
+    else
+      m = (l + r) / 2
 
-    if (l + r) % 2 != 0
-      m += 1
-    end
-
-    BinaryTree::Node.new(arr[m], parent: parent).tap do |node|
-      if l != m
-        node.left = create_bst(arr, l, m - 1, parent: node)
+      if (l + r) % 2 != 0
+        m += 1
       end
 
-      if r != m
-        node.right = create_bst(arr, m + 1, r, parent: node)
+      BinaryTree::Node.new(arr[m], parent: parent).tap do |node|
+        if l != m
+          node.left = create_bst(arr, l, m - 1, parent: node)
+        end
+
+        if r != m
+          node.right = create_bst(arr, m + 1, r, parent: node)
+        end
       end
     end
   end
 end
 
 RSpec.describe 'array_to_bst' do
+  include MinimalTree
+
   %i(a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("array_to_bst_#{implementation}", arr.sort) }

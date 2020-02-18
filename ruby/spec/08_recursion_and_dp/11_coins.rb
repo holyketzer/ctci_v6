@@ -1,6 +1,6 @@
 def coins_combinations_count(n, coins, max = coins.last, res = [])
   if n == coins[0] || n == 0
-    comnination = n > 0 ? (res + [n]).sort : res.sort
+    n > 0 ? (res + [n]).sort : res.sort
     1
   elsif n < coins[0]
     0

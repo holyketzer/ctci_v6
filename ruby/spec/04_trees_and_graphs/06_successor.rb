@@ -1,4 +1,4 @@
-require_relative './02_minimal_tree'
+require_relative '02_minimal_tree'
 
 # n - count of nodes, k - depth
 # Time - O(k), Mem = O(1)
@@ -45,6 +45,8 @@ def right?(node)
 end
 
 RSpec.describe 'next_node' do
+  include MinimalTree
+
   %i(a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("next_node_#{implementation}", node) }

@@ -23,6 +23,8 @@ def is_similar_trees?(node1, node2, tree2_root)
 end
 
 RSpec.describe 'is_subtree' do
+  include BstSequences
+
   %i(a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("is_subtree_#{implementation}?", tree1, tree2) }

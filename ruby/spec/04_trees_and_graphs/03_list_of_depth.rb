@@ -1,4 +1,4 @@
-require_relative './02_minimal_tree'
+require_relative '02_minimal_tree'
 
 # n - size of array
 # Time = O(n) Mem = O(n)
@@ -28,6 +28,8 @@ def lists_of_depth_a(tree)
 end
 
 RSpec.describe 'lists_of_depth' do
+  include MinimalTree
+
   %i(a).each do |implementation|
     describe "#{implementation} case" do
       subject { send("lists_of_depth_#{implementation}", tree).map(&:to_array).map { |arr| arr.map(&:value) } }

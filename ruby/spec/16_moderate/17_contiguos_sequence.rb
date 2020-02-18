@@ -62,7 +62,7 @@ module ContiguosSequence
         context 'array with only negative numbers' do
           let(:arr) { [-3, -2, -1] }
 
-          it { is_expected.to eq -1 }
+          it { is_expected.to eq(-1) }
         end
 
         context 'array with only positive numbers' do
