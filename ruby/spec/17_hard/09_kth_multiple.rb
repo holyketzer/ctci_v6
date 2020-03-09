@@ -52,19 +52,16 @@ module KthMultiple
 
   # Time=O(n) Mem=O(n)
   def solve_b(n, multipliers = [3, 5, 7])
-    # 1 3 9
-    # 5 15
-    # 7 21
     res = []
 
     queues = multipliers.map { |m| [m, SortedSet.new] }.to_h
     queues[multipliers.first] << 1
 
     while res.size < n do
-      m, q = queues.select { |_, q| q.size > 0 }.min_by { |_, q| q.first }
+      _, q = queues.select { |_, q| q.size > 0 }.min_by { |_, q| q.first }
 
-      x = queues[m].first
-      queues[m].delete(x)
+      x = q.first
+      q.delete(x)
 
       res << x
 
@@ -72,7 +69,7 @@ module KthMultiple
         nx = x * m
 
         if queues.all? { |_, set| !set.include?(nx) }
-          queues[m] << nx
+          q << nx
         end
       end
     end
