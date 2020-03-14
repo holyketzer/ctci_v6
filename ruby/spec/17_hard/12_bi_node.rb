@@ -37,6 +37,7 @@ module BiNode
     end
   end
 
+  # Time=O(n) Mem=O(log n)
   def tree_to_list(root)
     tail = append_node_to_list(root)
     head = tail
