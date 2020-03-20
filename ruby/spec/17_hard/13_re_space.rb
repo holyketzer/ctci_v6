@@ -26,9 +26,6 @@ module ReSpace
 
     def word?(str, index = 0)
       if index == str.size
-        if str == 'liket'
-          puts "!!! #{str} #{word}"
-        end
         word
       else
         if (child = children[str[index]])
