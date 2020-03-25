@@ -3,3 +3,4 @@ ruby '2.6.2'
 
 gem 'rspec', '~> 3.8'
 gem 'rb_heap'
+gem 'irb'
