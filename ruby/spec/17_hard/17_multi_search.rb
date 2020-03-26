@@ -18,7 +18,6 @@ module MultiSearch
       while offsets.size > 0 && i < sub.size do
         offsets = offsets.select { |j| j < @str.size && @str[j] == sub[i] }.map!(&:succ)
         i += 1
-        p offsets
       end
 
       i == sub.size ? offsets.map! { |j| j - sub.size } : []
