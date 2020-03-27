@@ -83,7 +83,7 @@ module ReSpace
 
   def solve_a(dict, text)
     dict = TrieNode.build_from_list(dict)
-    urcc, sentence = *solve_a_iteration(dict, text)
+    _urcc, sentence = *solve_a_iteration(dict, text)
     sentence
   end
 
@@ -152,7 +152,7 @@ module ReSpace
 
   def solve_b(dict, text)
     dict = TrieNode.build_from_list(dict)
-    urcc, sentence = *solve_b_iteration(dict, text)
+    _urcc, sentence = *solve_b_iteration(dict, text)
     sentence
   end
 
