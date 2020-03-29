@@ -32,6 +32,8 @@ module ContiguosSequence
         sum = 0
       end
     end
+
+    maxsum
   end
 
   RSpec.describe 'solve' do
