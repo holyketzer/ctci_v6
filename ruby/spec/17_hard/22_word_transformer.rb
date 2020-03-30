@@ -10,30 +10,6 @@ module WordTransformer
       @children = {}
     end
 
-    # def start_of_word?(str, index = 0)
-    #   if index == str.size
-    #     true
-    #   else
-    #     if (child = children[str[index]])
-    #       child.start_of_word?(str, index + 1)
-    #     else
-    #       false
-    #     end
-    #   end
-    # end
-
-    # def word?(str, index = 0)
-    #   if index == str.size
-    #     word
-    #   else
-    #     if (child = children[str[index]])
-    #       child.word?(str, index + 1)
-    #     else
-    #       false
-    #     end
-    #   end
-    # end
-
     def find(pattern, index = 0, res = [])
       if index == pattern.size && word
         res << self
