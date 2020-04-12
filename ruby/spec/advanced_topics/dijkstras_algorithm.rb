@@ -14,7 +14,6 @@ module DijkstrasAlgorithm
     shortest_path_heap << from
 
     while shortest_path_heap.size > 0
-      p shortest_path
       curr_node = shortest_path_heap.pop
       weight = shortest_path[curr_node]
 

@@ -64,7 +64,7 @@ module TopologicalSort
         end
 
         queue.last[1] = [] # remove children, they are handled
-      else children.size == 0
+      else
         vertices[vertex] = :black
         res << vertex
         queue.pop
