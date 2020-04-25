@@ -20,12 +20,53 @@ module SimpleRedBlackTrees
       ].join
     end
 
+    def validate!
+      if color == :red && (left&.color == :red || right&.color == :red)
+        raise Exception, "red node #{value} has red child"
+      end
+
+      left&.validate!
+      right&.validate!
+    end
+
     def depth
       1 + [left&.depth || 0, right&.depth || 0].max
     end
 
     def size
       1 + (left&.size || 0) + (right&.size || 0)
+    end
+
+    def black_heights(curr = 0, path = [])
+      if color == :black
+        curr += 1
+      end
+
+      path << value
+
+      if child_count == 0
+        # puts "#{path} = #{curr + 1}"
+        path.pop
+        [curr + 1, curr + 1]
+      elsif child_count == 1
+        if left
+          left.black_heights(curr, path).tap { path.pop } + [curr + 1]
+        else
+          [curr + 1] + right.black_heights(curr, path).tap { path.pop }
+        end
+      else
+        left.black_heights(curr, path) + right.black_heights(curr, path).tap { path.pop }
+      end
+    end
+
+    def child_count
+      if left && right
+        2
+      elsif left || right
+        1
+      else
+        0
+      end
     end
   end
 
@@ -57,11 +98,23 @@ module SimpleRedBlackTrees
       root&.size || 0
     end
 
+    def black_heights
+      root&.black_heights || []
+    end
+
     def validate!
+      root&.validate!
+
       max_expected_depth = (2 * Math.log(size + 1, 2)).ceil
 
       if depth > max_expected_depth
         raise Exception, "tree is unbalanced depth=#{depth} size=#{size} max_expected_depth=#{max_expected_depth}"
+      end
+
+      bh = black_heights
+
+      if bh.uniq.size > 1
+        raise Exception, "tree violates equal black height rule for all leaves #{bh}"
       end
     end
 
@@ -136,36 +189,32 @@ module SimpleRedBlackTrees
   RSpec.describe 'SimpleRedBlackTrees' do
     include SimpleRedBlackTrees
 
+    def log(value)
+      if only_this_file_run?(__FILE__)
+        puts value
+      end
+    end
+
     it do
       1.times do
         tree = Tree.new
         arr = []
 
         10.times do
-          p x = rand(0..100)
+          x = rand(0..100)
           tree.add(x)
           arr << x
-          puts tree.to_s
+          log(tree.to_s)
           tree.validate!
         end
 
         20.times do
-          p x = rand(-100..0)
+          x = rand(-100..0)
           tree.add(x)
           arr << x
-          puts tree.to_s
+          log(tree.to_s)
           tree.validate!
         end
-
-        # expect(tree.balance.abs).to be < 2
-        # expect(tree.size).to eq arr.size
-
-        # arr.shuffle.each do |x|
-        #   tree.remove(x)
-        #   expect(tree.balance.abs).to be < 2
-        # end
-
-        # expect(tree.size).to eq 0
       end
     end
   end

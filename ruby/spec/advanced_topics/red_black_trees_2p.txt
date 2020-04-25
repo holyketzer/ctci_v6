@@ -130,7 +130,7 @@ module RedBlackTrees
       if node
         path << node
 
-        if value < node.value
+        if value <= node.value
           node.left = add_node(node.left, value, path)
         else
           node.right = add_node(node.right, value, path)
@@ -211,35 +211,159 @@ module RedBlackTrees
       end
     end
 
-    def remove_node(node, value)
+    def remove_node(node, value, path = [])
       if node
         if value == node.value
           case node.child_count
           when 0
-            [nil, node.color]
+            if path.last != nil
+              path << nil
+            end
+            [nil, black?(node)]
           when 1
-            [(node.left || node.right), node.color] #.tap { |n| n.color = :red }
+            ([node.left || node.right, black?(node)]).tap { |n, _| path << n }
           when 2
+            path << node
             right_min_node = find_min_node(node.right)
+            path << right_min_node.right
+
             node.value = right_min_node.value
-            node.right, _ = *remove_node(node.right, right_min_node.value)
-            [node, nil] #.tap { |n| n.color = :red }
+            node.right, black_node_removed = remove_node(node.right, right_min_node.value, path)
+            # [node, black_node_removed]
+
+            both_last_black = path.size > 1 && black?(path[-2]) && black?(path[-1])
+            if path.size > 1 && (path[-2] == node && (black_node_removed || both_last_black))
+              pn = path[-2..-1]
+
+              top_node, step_up = remove_rebalance(*pn, false)
+              path[-2] = top_node
+
+              if step_up
+                step_up.times { path.pop }
+              else
+                path.last.color = :black
+                path.clear
+              end
+
+              [top_node, black_node_removed]
+            else
+              [node, black_node_removed]
+            end
           end
         else
-          if value < node.value
-            node.left, removed_color = *remove_node(node.left, value)
+          path << node
+          black_node_removed = false
+          left = false
+
+          if value <= node.value
+            left = true
+            node.left, black_node_removed = *remove_node(node.left, value, path)
           else
-            node.right, removed_color = *remove_node(node.right, value)
+            node.right, black_node_removed = *remove_node(node.right, value, path)
           end
 
-          if removed_color == :black
-            node.color = :red
+          # Trigger rebalance when we are on parent level: n - removed node, p - parent node
+          puts "#{node.value} black_node_removed=#{black_node_removed} #{path.map { |x| x&.value }}"
+          both_last_black = path.size > 1 && black?(path[-2]) && black?(path[-1]) && path[-1] != nil
+
+          # p "#{path[-2]&.value} == #{node&.value} && (#{black_node_removed} || #{both_last_black})"
+          if path.size > 1 && (path[-2] == node && (black_node_removed || both_last_black))
+            pn = path[-2..-1]
+
+            top_node, step_up = remove_rebalance(*pn, left)
+            if path[-2] != top_node
+              path.insert(-3, top_node)
+            end
+
+            if step_up
+              step_up.times { path.pop }
+              if path.size > 1
+                pn = path[-2..-1]
+                top_node, _ = remove_rebalance(*pn, nil)
+              end
+
+              if path.last
+                path.last.color = :black
+              end
+            else
+              if path.last
+                path.last.color = :black
+              end
+
+              path.clear
+            end
+
+            [top_node, black_node_removed]
+          else
+            [node, black_node_removed]
           end
-
-          # if remo
-
-          [insert_rebalance(node), nil]
         end
+      end
+    end
+
+    def remove_rebalance(p, x, left)
+      puts "remove_rebalance #{p&.value} #{x&.value || 'nil'}"
+      if black?(x)
+        if (x == nil && left) || x == p.left
+          w = p.right
+          res = p
+          p "left=#{left} w=#{w&.value}"
+
+          if red?(w)
+            w.color = :black
+            p.color = :red
+            res = rotate_left(p)
+            w = res.left.right
+          end
+
+          if black?(w.left) && black?(w.right)
+            w.color = :red
+            [res, 1]
+          else
+            if black?(w.right)
+              w.left.color = :black
+              w.color = :red
+              w = rotate_right(w)
+            end
+
+            w.color = res.color
+            res.color = :black
+            w.right.color = :black
+            res = rotate_left(res)
+
+            [res, nil]
+          end
+        else
+          w = p.left
+          res = p
+
+          if red?(w)
+            w.color = :black
+            p.color = :red
+            res = rotate_right(p)
+            w = res.right.left
+          end
+
+          if black?(w.left) && black?(w.right)
+            w.color = :red
+            [res, 1]
+          else
+            if black?(w.left)
+              w.right.color = :black
+              w.color = :red
+              w = rotate_left(w)
+            end
+
+            w.color = res.color
+            res.color = :black
+            w.left.color = :black
+            res = rotate_right(res)
+
+            [res, nil]
+          end
+        end
+      else
+        [p, nil]
       end
     end
 
@@ -257,6 +381,10 @@ module RedBlackTrees
 
     def red?(node)
       node != nil && node.color == :red
+    end
+
+    def color(node)
+      black?(node) ? :black : :red
     end
 
     def rotate_left(a)
@@ -338,28 +466,28 @@ module RedBlackTrees
     include RedBlackTrees
 
     it do
-      1000.times do
+      1.times do
         tree = Tree.new
         arr = []
 
         10.times do
-          p x = rand(0..100)
+          x = rand(0..100)
           tree.add(x)
           arr << x
           puts tree.to_s
           tree.validate!
         end
 
-        30.times do
-          p x = rand(100..200)
+        20.times do
+          x = rand(100..200)
           tree.add(x)
           arr << x
           puts tree.to_s
           tree.validate!
         end
 
-        # [0, 0, 3, 6, 4, 8, 8, 1, 6, 4, 18, 16, 18, 12, 14, 13, 17, 14, 18, 11].each do |x|
-        #   p x
+        # [99, 38, 52, 11, 57, 75, 36, 36, 97, 77].each do |x|
+        #   # p x
         #   tree.add(x)
         #   arr << x
         #   puts tree.to_s
@@ -368,15 +496,15 @@ module RedBlackTrees
 
         expect(tree.size).to eq arr.size
 
-        # arr.sort.each_with_index do |x, index|
-        #   p x
-        #   tree.remove(x)
-        #   puts tree.to_s
-        #   expect(tree.size).to eq arr.size - index - 1
-        #   tree.validate!
-        # end
+        arr.sort.each_with_index do |x, index|
+          p x
+          tree.remove(x)
+          puts tree.to_s
+          expect(tree.size).to eq arr.size - index - 1
+          tree.validate!
+        end
 
-        # expect(tree.size).to eq 0
+        expect(tree.size).to eq 0
       end
     end
   end

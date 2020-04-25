@@ -1,3 +1,5 @@
+require 'pathname'
+
 # TODO: should be time = O(n*log(n)), mem = O(1)
 def sort!(str)
   str.chars.sort!.join
@@ -56,7 +58,12 @@ def my_permute(arr)
   end
 end
 
-
 def only_this_file_run?(file)
-  ARGV[0] && file.include?(ARGV[0])
+  if run_path = ARGV[0]
+    if !Pathname.new(run_path).absolute?
+      run_path = File.join(Dir.pwd, run_path)
+    end
+
+    run_path.include?(file)
+  end
 end
