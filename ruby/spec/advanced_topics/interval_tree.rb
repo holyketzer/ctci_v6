@@ -16,8 +16,19 @@ module IntervalTree
       (left + right) / 2.0
     end
 
-    def include?(point)
-      left <= point && point <= right
+    def include?(item)
+      case item
+      when Numeric
+        left <= item && item <= right
+      when Interval
+        (left <= item.left && item.left <= self.right) || (left <= item.right && item.right <= self.right)
+      else
+        raise ArgumentError, "unsupported type #{item.class}"
+      end
+    end
+
+    def intersect?(interval)
+      self.include?(interval) || interval.include?(self)
     end
 
     def on_the_left?(point)
@@ -33,13 +44,106 @@ module IntervalTree
     end
   end
 
-  class Node
-    attr_reader :center, :left, :right, :middle
+  class PointIndexNode
+    attr_accessor :value, :intervals, :left, :right, :parent
 
-    def initialize(intervals)
+    def initialize(index, li = 0, ri = index.size - 1, parent = nil)
+      mi = (ri + li) / 2
+      @value, @intervals = *index[mi]
+      @parent = parent
+
+      @left = mi > li ? PointIndexNode.new(index, li, mi - 1, self) : nil
+      @right = ri > mi ? PointIndexNode.new(index, mi + 1, ri, self) : nil
+    end
+
+    def find_min(interval)
+      if interval.left == value
+        self
+      elsif interval.left < value && left
+        left.find_min(interval)
+      elsif interval.left > value && right
+        right.find_min(interval)
+      elsif interval.include?(value)
+        self
+      end
+    end
+
+    def find_max(interval)
+      if interval.right == value
+        self
+      elsif interval.right < value && left
+        left.find_max(interval)
+      elsif interval.right > value && right
+        right.find_max(interval)
+      elsif interval.include?(value)
+        self
+      end
+    end
+
+    def each_up_to(max_node, &block)
+      node = self
+
+      while node do
+        block.call(node)
+
+        if node == max_node
+          break
+        end
+
+        node = min_node(node.right) || parent_of_left_subtree(node)
+      end
+    end
+
+    def min_node(node)
+      prev = node
+
+      while node do
+        prev = node
+        node = node.left
+      end
+
+      prev
+    end
+
+    def parent_of_left_subtree(node)
+      while node && node.parent && node.parent.left != node do
+        node = node.parent
+      end
+
+      node&.parent
+    end
+
+    def to_s
+      "(#{@left} [#{value} #{intervals.map(&:to_s).join(' + ')}] #{right})"
+    end
+
+    class << self
+      def build(intervals)
+        index = intervals.each_with_object(Hash.new { |hash, key| hash[key] = [] }) do |interval, res|
+          res[interval.left] << interval
+          res[interval.right] << interval
+        end
+
+        if index.size > 0
+          new(index.sort_by(&:first))
+        else
+          nil
+        end
+      end
+    end
+  end
+
+  class Node
+    attr_reader :center, :left, :right, :middle, :point_index
+
+    def initialize(intervals, build_point_index = true)
       @center = median(intervals.map(&:center))
 
       @left, @middle, @right = *split(intervals, @center)
+
+      if build_point_index
+        @point_index = PointIndexNode.build(intervals)
+      end
     end
 
     def median(values)
@@ -62,9 +166,9 @@ module IntervalTree
       end
 
       [
-        left_intervals.any? ? Node.new(left_intervals) : nil,
+        left_intervals.any? ? Node.new(left_intervals, false) : nil,
         middle_intervals.any? ? MiddleNode.new(middle_intervals) : nil,
-        right_intervals.any? ? Node.new(right_intervals) : nil,
+        right_intervals.any? ? Node.new(right_intervals, false) : nil,
       ]
     end
 
@@ -96,7 +200,32 @@ module IntervalTree
 
     def each_intersection_with_interval(interval, yielder = nil, &block)
       wrap_to_enumerator(yielder, block) do |yielder|
+        if point_index
+          intervals = Set.new
 
+          # Cover all intervals which intersect interval
+          min_node = point_index.find_min(interval)
+          max_node = point_index.find_max(interval)
+
+          if (min_node && max_node)
+            min_node.each_up_to(max_node) do |node|
+              node.intervals.each do |i|
+                if !intervals.include?(i)
+                  intervals << i
+                  yielder << i
+                end
+              end
+            end
+          end
+
+          # Cover all intervals which enclose interval
+          each_intersection_with_point(interval.center) do |i|
+            if !intervals.include?(i)
+              intervals << i
+              yielder << i
+            end
+          end
+        end
       end
     end
 
@@ -139,18 +268,23 @@ module IntervalTree
         2.times.map do |r|
           Interval.new(l - r, l + r + 1)
         end
-      end
+      end << Interval.new(0, 100)
     end
 
+    let(:point) { 9 }
+    let(:interval) { Interval.new(8, 10) }
+
     it do
-      puts intervals.sort_by(&:left)
-      puts tree.to_s
+      # puts intervals.sort_by(&:left)
+      # puts tree.point_index.to_s
 
-      expect(tree.each_intersection_with_point(9).map(&:to_s)).to eq [
-        "(6, 9)", "(8, 9)", "(7, 10)", "(8, 11)", "(9, 10)"
-      ]
+      expect(tree.each_intersection_with_point(point).map(&:to_s).sort).to eq(
+        intervals.select { |i| i.include?(point) }.map(&:to_s).sort
+      )
 
-
+      expect(tree.each_intersection_with_interval(interval).map(&:to_s).sort).to eq (
+        intervals.select { |i| i.intersect?(interval) }.map(&:to_s).sort
+      )
     end
   end
 end
